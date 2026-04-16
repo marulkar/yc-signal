@@ -1,0 +1,75 @@
+{
+  "entities": {
+    "Startup": {
+      "title": "Startup",
+      "description": "A YC startup from a specific batch.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Name of the startup" },
+        "batch": { "type": "string", "description": "YC Batch (e.g., W26)" },
+        "description": { "type": "string", "description": "Short description" },
+        "website": { "type": "string", "format": "uri" },
+        "ycUrl": { "type": "string", "format": "uri" },
+        "founders": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "linkedin": { "type": "string" },
+              "pedigree": { "type": "string", "description": "Stanford, Google, etc." }
+            }
+          }
+        },
+        "signalScore": { "type": "number" },
+        "moatAnalysis": { "type": "string" },
+        "sentiment": { "type": "number" },
+        "founderPedigreeScore": { "type": "number" },
+        "technicalMoatScore": { "type": "number" },
+        "hypeCoefficient": { "type": "number" },
+        "hnCommentsCount": { "type": "integer" },
+        "githubStars": { "type": "integer" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "batch", "signalScore"]
+    },
+    "User": {
+      "title": "User",
+      "description": "App user profile.",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "format": "email" },
+        "role": { "type": "string", "enum": ["admin", "user"] },
+        "watchlist": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["email", "role"]
+    },
+    "IngestionLog": {
+      "title": "Ingestion Log",
+      "description": "Log of scraper runs and results.",
+      "type": "object",
+      "properties": {
+        "timestamp": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["success", "failed", "running"] },
+        "source": { "type": "string" },
+        "itemsProcessed": { "type": "integer" },
+        "error": { "type": "string" }
+      },
+      "required": ["timestamp", "status", "source"]
+    }
+  },
+  "firestore": {
+    "/startups/{startupId}": {
+      "schema": "Startup",
+      "description": "Collection of analyzed startups."
+    },
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles and settings."
+    },
+    "/ingestion_logs/{logId}": {
+      "schema": "IngestionLog",
+      "description": "History of data ingestion runs."
+    }
+  }
+}
